@@ -1,9 +1,11 @@
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
-export function displayImages(images) {
+export function displayImages(images, isLoadMore = false) {
   const gallery = document.querySelector('.gallery');
-  gallery.innerHTML = ''; // Clear previous images
+  if (!isLoadMore) {
+    gallery.innerHTML = ''; // Clear previous images
+  }
 
   if (images.length === 0) {
     iziToast.info({
@@ -13,6 +15,8 @@ export function displayImages(images) {
     });
     return;
   }
+
+  const fragment = document.createDocumentFragment();
 
   images.forEach(image => {
     const galleryItem = document.createElement('div');
@@ -59,12 +63,21 @@ export function displayImages(images) {
     });
 
     galleryItem.appendChild(infoStatsContainer);
-    gallery.appendChild(galleryItem);
+    fragment.appendChild(galleryItem);
   });
 
+  gallery.appendChild(fragment);
   document.getElementById('gallery').classList.remove('hidden');
 
   // Refresh SimpleLightbox
   const lightbox = new SimpleLightbox('.gallery a');
   lightbox.refresh();
+
+  // Smooth scroll
+  const { height: cardHeight } =
+    gallery.firstElementChild.getBoundingClientRect();
+  window.scrollBy({
+    top: cardHeight * 2,
+    behavior: 'smooth',
+  });
 }
