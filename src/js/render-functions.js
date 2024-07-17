@@ -7,15 +7,6 @@ export function displayImages(images, isLoadMore = false) {
     gallery.innerHTML = ''; // Clear previous images
   }
 
-  if (images.length === 0) {
-    iziToast.info({
-      title: 'Info',
-      message:
-        'Sorry, there are no images matching your search query. Please try again!',
-    });
-    return;
-  }
-
   const fragment = document.createDocumentFragment();
 
   images.forEach(image => {
@@ -25,7 +16,7 @@ export function displayImages(images, isLoadMore = false) {
     const link = document.createElement('a');
     link.href = image.largeImageURL;
     link.setAttribute('data-lightbox', 'gallery');
-    link.setAttribute('target', '_blank'); // Открытие изображения в новом окне
+    link.setAttribute('target', '_blank');
 
     const img = document.createElement('img');
     img.src = image.webformatURL;
@@ -68,16 +59,4 @@ export function displayImages(images, isLoadMore = false) {
 
   gallery.appendChild(fragment);
   document.getElementById('gallery').classList.remove('hidden');
-
-  // Refresh SimpleLightbox
-  const lightbox = new SimpleLightbox('.gallery a');
-  lightbox.refresh();
-
-  // Smooth scroll
-  const { height: cardHeight } =
-    gallery.firstElementChild.getBoundingClientRect();
-  window.scrollBy({
-    top: cardHeight * 2,
-    behavior: 'smooth',
-  });
 }
