@@ -93,6 +93,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
       displayImages(data.hits, true);
       lightbox.refresh();
+
+      const { height: cardHeight } = document
+        .querySelector('.gallery')
+        .firstElementChild.getBoundingClientRect();
+      window.scrollBy({
+        top: cardHeight * 2,
+        behavior: 'smooth',
+      });
+
       if (currentPage * 15 < data.totalHits) {
         loadMoreButton.classList.remove('hidden');
       } else {
